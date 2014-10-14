@@ -2080,29 +2080,12 @@ var vboxChooser = {
 					})
 				)
 
-				.load(function(){
-					
-					if(vboxChooser._compact) return;
-					
-					$(this).addClass('vboxHover');
-
-					// Resize title and add hover class?
-					if(!$(this).parent().hasClass('vboxChooserGroupRoot')) {
-						
-						// Set width of title to -group info span width
-						var infoWidth = $(this).children('span.vboxChooserGroupInfo').width();
-						var pWidth = $(this).width();
-						
-						$(this).children('span.vboxChooserGroupName').css({'max-width':(pWidth-infoWidth-20)+'px'});
-						
-					}
-                })
 
 				.hover(function(){
 					
-					if(vboxChooser._compact) return;
-					
-					$(this).addClass('vboxHover');
+				//	if(vboxChooser._compact) return;
+				//	
+				//	$(this).addClass('vboxHover');
 
 					// Resize title and add hover class?
 					if(!$(this).parent().hasClass('vboxChooserGroupRoot')) {
