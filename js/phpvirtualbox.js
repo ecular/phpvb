@@ -891,6 +891,25 @@ var vboxVMDetailsSections = {
 	},
 	
 	/*
+	 * VM Description
+	 */
+	description: {
+		icon: 'description_16px.png',
+		title: trans('Description','UIDetailsPagePrivate'),
+		settingsLink: 'General:2',
+		rows : function(d) {
+			return [{
+				title: '',
+				data: $('<tr />').attr({'class':'vboxDetailRow'}).append(
+						$('<td />').attr({'class':'vboxDetailDescriptionCell','colspan':'2'})
+							.html(d.description.length ? $('<div />').text(d.description).html() : '<span class="vboxDetailsNone">'+trans("None",null,null,'details report (description)')+'</span>')
+				),
+				rawRow: true
+			}];
+		}
+	},
+
+	/*
 	 * Display
 	 */
 	display : {
@@ -1251,6 +1270,29 @@ var vboxVMDetailsSections = {
 	},
 	
 	/*
+	 * Shared folders list
+	 */
+	sharedfolders : {
+		icon: 'shared_folder_16px.png',
+		title: trans('Shared Folders', 'UIDetailsPagePrivate'),
+		settingsLink: 'SharedFolders',
+		rows: function(d) {
+
+			if(!d['sharedFolders'] || d['sharedFolders'].length < 1) {
+				return [{
+					title: '<span class="vboxDetailsNone">'+trans('None',null,null,'details report (shared folders)')+'</span>',
+					html: true
+				}];
+			}
+			
+			return [{
+					title: trans('Shared Folders', 'UIDetailsPagePrivate'),
+					data: d['sharedFolders'].length
+				}];
+		}
+	},
+
+	/*
 	 * USB
 	 */
 	usb : {
@@ -1284,48 +1326,6 @@ var vboxVMDetailsSections = {
 			
 			return rows;
 
-		}
-	},
-	
-	/*
-	 * Shared folders list
-	 */
-	sharedfolders : {
-		icon: 'shared_folder_16px.png',
-		title: trans('Shared Folders', 'UIDetailsPagePrivate'),
-		settingsLink: 'SharedFolders',
-		rows: function(d) {
-
-			if(!d['sharedFolders'] || d['sharedFolders'].length < 1) {
-				return [{
-					title: '<span class="vboxDetailsNone">'+trans('None',null,null,'details report (shared folders)')+'</span>',
-					html: true
-				}];
-			}
-			
-			return [{
-					title: trans('Shared Folders', 'UIDetailsPagePrivate'),
-					data: d['sharedFolders'].length
-				}];
-		}
-	},
-	
-	/*
-	 * VM Description
-	 */
-	description: {
-		icon: 'description_16px.png',
-		title: trans('Description','UIDetailsPagePrivate'),
-		settingsLink: 'General:2',
-		rows : function(d) {
-			return [{
-				title: '',
-				data: $('<tr />').attr({'class':'vboxDetailRow'}).append(
-						$('<td />').attr({'class':'vboxDetailDescriptionCell','colspan':'2'})
-							.html(d.description.length ? $('<div />').text(d.description).html() : '<span class="vboxDetailsNone">'+trans("None",null,null,'details report (description)')+'</span>')
-				),
-				rawRow: true
-			}];
 		}
 	}
 };
