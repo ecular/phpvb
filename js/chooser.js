@@ -564,8 +564,30 @@ var vboxChooser = {
 	 * Generate HTML from VM definition
 	 */
 	vmHTML : function (vmn) {
-		
-		var tbl = $('<table />').attr({'class':'vboxChooserItem-'+vboxChooser._anchorid+'-'+vmn.id + " vboxChooserVM"})
+
+        var tbl;
+        //var owner = '1',login_user = '1';
+      //  if(!(vmn.id == 'host'))
+      //  {
+      //      $.when(vboxAjaxRequest('machineEnumerateExtraData',{'vm':vmn.id})).done(function(d){
+      //          owner = d.responseData;
+      //          //alert('owner:'+owner);
+      //      }).fail(function() {
+      //          ;
+      //      });
+      //      $.when(vboxAjaxRequest('getCurrentUser')).done(function(d){
+      //          login_user = d.responseData;
+      //          //alert('login user:'+login_user);
+      //      }).fail(function() {
+      //          ;
+      //      });
+      //      //var loadData = vboxAjaxRequest('machineEnumerateExtraData',{'vm':vmn.id});
+      //      alert("Welcome!");
+      //      alert('owner:'+owner+' user:'+login_user);
+      //  }
+        //if(vmn.name == 'ubuntu_test' || vmn.id == 'host')
+        {
+        tbl = $('<table />').attr({'class':'vboxChooserItem-'+vboxChooser._anchorid+'-'+vmn.id + " vboxChooserVM"})
 			.on('mousedown',vboxChooser.selectItem)
 			.hoverClass('vboxHover').data('vmid',vmn.id);
 		
@@ -681,19 +703,24 @@ var vboxChooser = {
 			}
 			
 		// Not rendering host
-		} else {
-			
-			$(td).append('<div class="vboxFitToContainer vboxVMName"><span class="vboxVMName">'+$('<span />').text(vmn.name).html()+'</span>'+ (vmn.currentSnapshotName ? '<span class="vboxVMChooserSnapshotName"> (' + $('<span />').text(vmn.currentSnapshotName).html() + ')</span>' : '')+'</div>');
-			
+            }
+            /*other !host VM*/
+            else 
+            {
+             //   if(vmn.name == 'ubuntu_test')
+                //{
+                    $(td).append('<div class="vboxFitToContainer vboxVMName"><span class="vboxVMName">'+$('<span />').text(vmn.name).html()+'</span>'+ (vmn.currentSnapshotName ? '<span class="vboxVMChooserSnapshotName"> (' + $('<span />').text(vmn.currentSnapshotName).html() + ')</span>' : '')+'</div>');
 
-			// Table gets tool tips
-			tip = vboxChooser._vmToolTip.replace('%1',('<b>'+$('<span />').text(vmn.name).html()+'</b>'+(vmn.currentSnapshotName ? ' (' + $('<span />').text(vmn.currentSnapshotName).html() + ')' : '')))
-				.replace('%2',trans(vboxVMStates.convert(vmn.state),'VBoxGlobal'))
-				.replace('%3',vboxDateTimeString(vmn.lastStateChange))
-				.replace('%4',trans(vmn.sessionState,'VBoxGlobal').toLowerCase());
-			
-			$(tbl).tipped({'source':tip,'position':'mouse','delay':1500});
-		}
+
+                    // Table gets tool tips
+                    tip = vboxChooser._vmToolTip.replace('%1',('<b>'+$('<span />').text(vmn.name).html()+'</b>'+(vmn.currentSnapshotName ? ' (' + $('<span />').text(vmn.currentSnapshotName).html() + ')' : '')))
+                        .replace('%2',trans(vboxVMStates.convert(vmn.state),'VBoxGlobal'))
+                        .replace('%3',vboxDateTimeString(vmn.lastStateChange))
+                        .replace('%4',trans(vmn.sessionState,'VBoxGlobal').toLowerCase());
+
+                        $(tbl).tipped({'source':tip,'position':'mouse','delay':1500});
+               // }
+            }
 		
 		$(tr).append(td).appendTo(tbl);
 		
@@ -754,8 +781,8 @@ var vboxChooser = {
 			});
 		}
 		
+    }
 		return tbl;
-		
 	},
 
 	
@@ -2236,9 +2263,6 @@ var vboxChooser = {
 		vboxChooser.selectionMode = vboxSelectionModeNone;
 		
 	}
-	
-	
-
 };
 
 $(document).ready(function(){

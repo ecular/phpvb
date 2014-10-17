@@ -972,6 +972,16 @@ class vboxconnector {
 	}
 	
 	/**
+     * get current Login user
+     */
+     public function remote_getCurrentUser() {
+         if ( isset($_SESSION['user']) )
+         {
+             return $_SESSION['user'];
+         }
+         return NULL;
+     }
+	/**
 	 * Enumerate extra data of a vm
 	 *
 	 * @param array $args array of arguments. See function body for details.
@@ -984,18 +994,19 @@ class vboxconnector {
 		/* @var $m IMachine */
 		$m = $this->vbox->findMachine($args['vm']);
 	
-		$props = array();
-		
-		$keys = $m->getExtraDataKeys();
-		
-		usort($keys,'strnatcasecmp');
-		
-		foreach($keys as $k) {
-			$props[$k] = $m->getExtraData($k);
-		}
-		$m->releaseRemote();
-	
-		return $props;
+	//	$props = array();
+	//	
+	//	$keys = $m->getExtraDataKeys();
+	//	
+	//	usort($keys,'strnatcasecmp');
+	//	
+	//	foreach($keys as $k) {
+	//		$props[$k] = $m->getExtraData($k);
+	//	}
+	//	$m->releaseRemote();
+	//
+	//	return $props;
+        return $m->getExtraData('phpvb/sso/owner');
 	
 	}
 	
@@ -3552,7 +3563,7 @@ class vboxconnector {
 		}
 
 		// create machine
-		if (@$this->settings->enforceVMOwnership )
+		if (@$this->settings->enforceVMOwnership)
 			$args['name'] = $_SESSION['user'] . '_' . $args['name'];
 
 		/* Check if file exists */
@@ -3573,7 +3584,6 @@ class vboxconnector {
 
 		// Set memory
 		$m->memorySize = intval($args['memory']);
-
 
 		// Save and register
 		$m->saveSettings();
@@ -3789,7 +3799,6 @@ class vboxconnector {
 		// Look for a request for a single vm
 		if($args['vm']) {
 			
-			$machines = array($this->vbox->findMachine($args['vm']));
 		
 		// Full list
 		} else {
@@ -3853,9 +3862,7 @@ class vboxconnector {
 				$machine->releaseRemote();
 			} catch (Exception $e) { }
 		}
-		
 		return $vmlist;
-
 	}
 
 	/**
@@ -4095,6 +4102,8 @@ class vboxconnector {
 	 * @return array shared folder info
 	 */
 	private function _machineGetSharedFolders(&$m) {
+
+        //$m->setExtraData('xujian','xujian');
 		$sfs = &$m->sharedFolders;
 		$return = array();
 		foreach($sfs as $sf) { /* @var $sf ISharedFolder */
