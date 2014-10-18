@@ -557,7 +557,6 @@ var vboxChooser = {
 		
 		// Possible resize needed
 		vboxChooser._resizeElements(true);
-
 	},
 	
 	/*
@@ -566,31 +565,27 @@ var vboxChooser = {
 	vmHTML : function (vmn) {
 
         var tbl;
+        var flag = 1;
         //var owner = '1',login_user = '1';
-      //  if(!(vmn.id == 'host'))
-      //  {
-      //      $.when(vboxAjaxRequest('machineEnumerateExtraData',{'vm':vmn.id})).done(function(d){
-      //          owner = d.responseData;
-      //          //alert('owner:'+owner);
-      //      }).fail(function() {
-      //          ;
-      //      });
-      //      $.when(vboxAjaxRequest('getCurrentUser')).done(function(d){
-      //          login_user = d.responseData;
-      //          //alert('login user:'+login_user);
-      //      }).fail(function() {
-      //          ;
-      //      });
-      //      //var loadData = vboxAjaxRequest('machineEnumerateExtraData',{'vm':vmn.id});
-      //      alert("Welcome!");
-      //      alert('owner:'+owner+' user:'+login_user);
-      //  }
-        //if(vmn.name == 'ubuntu_test' || vmn.id == 'host')
+        if(!(vmn.id == 'host'))
         {
-        tbl = $('<table />').attr({'class':'vboxChooserItem-'+vboxChooser._anchorid+'-'+vmn.id + " vboxChooserVM"})
-			.on('mousedown',vboxChooser.selectItem)
-			.hoverClass('vboxHover').data('vmid',vmn.id);
-		
+            var current_user = vboxAjaxRequestSyn('getCurrentUser');
+            var owner = vboxAjaxRequestSyn('machineEnumerateExtraData',{'vm':vmn.id});
+            if(current_user != owner)
+                flag = 0;
+        }
+
+        //if(flag == 1)
+        {
+            if(flag == 1)
+                tbl = $('<table />').attr({'class':'vboxChooserItem-'+vboxChooser._anchorid+'-'+vmn.id + " vboxChooserVM"})
+                    .on('mousedown',vboxChooser.selectItem)
+                    .hoverClass('vboxHover').data('vmid',vmn.id);
+            else
+                tbl = $('<table />').attr({'style':'visibility:hidden','class':'vboxChooserItem-'+vboxChooser._anchorid+'-'+vmn.id + " vboxChooserVM"})
+                    .on('mousedown',vboxChooser.selectItem)
+                    .hoverClass('vboxHover').data('vmid',vmn.id);
+
 		
 		// Drag-and-drop functionality
 		/////////////////////////////////
@@ -626,7 +621,8 @@ var vboxChooser = {
 			}
 			);
 		}
-		$('<tr />').append(td).appendTo(tbl);
+        if(flag == 1)
+            $('<tr />').append(td).appendTo(tbl);
 
 		
 		
@@ -722,7 +718,8 @@ var vboxChooser = {
                // }
             }
 		
-		$(tr).append(td).appendTo(tbl);
+            if(flag == 1)
+            $(tr).append(td).appendTo(tbl);
 		
 		// VM state row
 		var tr = $('<tr />');
@@ -746,7 +743,8 @@ var vboxChooser = {
 			$(td).html("<div class='vboxFitToContainer vboxVMState'><img src='images/vbox/" + vboxMachineStateIcon(vmn.state) +"' /><span class='vboxVMState'>" + trans(vboxVMStates.convert(vmn.state),'VBoxGlobal') + '</span></div>');
 		}
 		
-		$(tr).append(td).appendTo(tbl);
+        if(flag == 1)
+            $(tr).append(td).appendTo(tbl);
 
 		// Droppable targets
 		var td = $('<td />').attr({'colspan':'2'}).addClass('vboxChooserDropTarget vboxDropTargetBottom');
@@ -759,7 +757,8 @@ var vboxChooser = {
 				}
 			);
 		}
-		$('<tr />').addClass('vboxChooserDropTarget').css({'height':'4px'}).append(td).appendTo(tbl);
+        if(flag == 1)
+            $('<tr />').addClass('vboxChooserDropTarget').css({'height':'4px'}).append(td).appendTo(tbl);
 		
 		
 		// Context menus?
@@ -782,7 +781,7 @@ var vboxChooser = {
 		}
 		
     }
-		return tbl;
+            return tbl;
 	},
 
 	

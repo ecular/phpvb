@@ -81,7 +81,8 @@ function vboxAjaxRequest(fn,params) {
 		.fail(function(d,etext,xlr,d2) {
 
 			// Fatal error previously occurred
-			if($('#vboxPane').data('vboxFatalError')) return null;
+			if($('#vboxPane').data('vboxFatalError')) 
+                return null;
 			
 			if(etext != 'error') {
 				
@@ -188,8 +189,180 @@ function vboxAjaxRequest(fn,params) {
 	}).fail(function(){
 		def.reject();
 	});
-	
 	return def.promise();
+}
+
+/**
+ * Performs AJAX request(SYN), alert()'s returned errors
+ * 
+ * @param {String} fn - AJAX function to call
+ * @param {Object} params - params to pass to AJAX call
+ * @return {Object} deferred promise
+ */
+function vboxAjaxRequestSyn(fn,params) {
+
+    var teststr = '';
+    //$.when($.post('lib/ajax.php', $.extend(true,{},(params ? params : {}),{'fn':fn}),undefined,"json")
+    $.ajax({ 
+        type: 'POST', 
+        url: 'lib/ajax.php', 
+        data: $.extend(true,{},(params ? params : {}),{'fn':fn}), 
+        success: function(d){
+            teststr =  d.data.responseData; 
+        }, 
+        dataType: 'json', 
+        async: false 
+    });
+    return teststr;
+}
+
+/**
+ * Performs AJAX request(SYN), alert()'s returned errors
+ * 
+ * @param {String} fn - AJAX function to call
+ * @param {Object} params - params to pass to AJAX call
+ * @return {Object} deferred promise
+ */
+function vboxAjaxRequestSyn_bak(fn,params) {
+	
+	// Promise for data
+	var def = $.Deferred();
+    var teststr = 'inited';
+	
+	// Fatal error previously occurred
+	if($('#vboxPane').data('vboxFatalError'))
+		return def.reject();
+	
+	$.when($.post('lib/ajax.php', $.extend(true,{},(params ? params : {}),{'fn':fn}),undefined,"json")
+		// Run on error
+		.fail(function(d,etext,xlr,d2) {
+
+			// Fatal error previously occurred
+			if($('#vboxPane').data('vboxFatalError'))
+                return null;
+			if(etext != 'error') 
+            {
+				
+				// Halt on parse errors
+				if(etext.search(/parse/i) > -1) {
+					$('#vboxPane').data('vboxFatalError',1);
+				}
+				
+				if(window.console && window.console.log)
+					window.console.log(etext + ': '+ d.responseText);
+				
+				vboxAlert({'error':'Ajax error: ' + etext,'details':d.responseText},{'width':'400px'});
+
+			}
+            else
+            {
+				
+				// Check for error HTTP status
+				if(d && d.status && (String(d.status).substring(0,1) == '4' || String(d.status).substring(0,1) == '5')) {
+					var err = {error:'<div align="center">HTTP error: ' + d.status + ' ' + d.statusText+"</div>",details:''};
+					for(var i in d) {
+						if(typeof(d[i]) == 'function' || typeof(d[i]) == 'object') continue;
+						err.details += i + ': "' + d[i] + '"' + "\n";
+					}
+					phpVirtualBoxFailure(err);
+					
+				} else {
+					phpVirtualBoxFailure('<div align="center">(General communication failure)');					
+				}
+			}
+			
+			return null;
+			
+		// Filter out data and display error messages
+		}).pipe(function(d){
+
+			// Fatal error previously occurred
+			if($('#vboxPane').data('vboxFatalError')) {
+				return null;
+			}
+
+			// Append debug output to console
+			if(d && d.messages && window.console && window.console.log) {
+				for(var i = 0; i < d.messages.length; i++) {
+					window.console.log(d.messages[i]);
+				}
+			}
+			
+			if(d.errors.length > 0) {
+				
+				
+				for(var i = 0; i < d.errors.length; i++) {
+					
+					// Handle fatal and connection errors
+					if(d.errors[i].fatal || d.errors[i].connection) {
+						
+						// Multiple Servers check
+						if(d.errors[i].connection && $('#vboxPane').data('vboxConfig')	) {
+							
+							$('#vboxPane').data('vboxFatalError',1);
+							$('#vboxPane').css({'display':'none'});
+							
+							s='';
+							if($('#vboxPane').data('vboxConfig').servers && $('#vboxPane').data('vboxConfig').servers.length) {
+								var servers = $('#vboxPane').data('vboxConfig').servers;
+								for(var a = 0; a < servers.length; a++) {
+									servers[a] = "<a href='?server="+servers[a].name+"'>"+$('<div />').html(servers[a].name).text()+"</a>";
+								}
+								s = '<div style="display: block">'+trans('Server List','phpVirtualBox')+': '+servers.join(', ')+'</div>';
+							}
+							if(s) vboxAlert(s);
+							vboxAlert(d.errors[i],{'width':'400px'});
+							vboxAlert('<p>'+trans('An error occurred communicating with your vboxwebsrv. No more requests will be sent by Vulnerability Verification Platform until the error is corrected and this page is refreshed. The details of this connection error should be displayed in a subsequent dialog box.','漏洞兼容性验证平台')+'</p>'+s,{'width':'50%'});
+							
+							
+						
+						// Ignore connection errors until we have config data unless this was a login attempt
+						} else if(!d.errors[i].connection || fn == 'login') {
+							
+							// If we have config data, and the error is fatal, halt processing
+							if(d.errors[i].fatal && $('#vboxPane').data('vboxConfig')) {
+								$('#vboxPane').data('vboxFatalError',1);
+								$('#vboxPane').css({'display':'none'});
+							}
+
+							vboxAlert(d.errors[i],{'width':'400px'});
+							
+						}
+						
+					} else {
+						
+						// Error from normal request
+						vboxAlert(d.errors[i],{'width':'400px'});
+					}
+					
+				} // </ foreach error >
+				
+			} // </ if errors.length >
+				
+			return (d && d.data ? d.data : null);
+			
+        })
+    ).done(function(d) {
+        if(d)
+    {
+        def.resolve(d);
+        teststr = teststr + d;
+        alert("in: "+ d.responseData);
+        //teststr = teststr + " resolve";
+    }
+        else
+    {
+        def.reject();
+        //alert(String("reject"));
+        //teststr = teststr + " reject";
+    }
+    }).fail(function(){
+        def.reject();
+        //teststr = teststr + " failed";
+    });
+
+    //return 'test OK'+ teststr;
+    return teststr;
 }
 
 /**

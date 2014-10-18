@@ -979,7 +979,7 @@ class vboxconnector {
          {
              return $_SESSION['user'];
          }
-         return NULL;
+        return NULL;
      }
 	/**
 	 * Enumerate extra data of a vm
