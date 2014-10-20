@@ -566,12 +566,12 @@ var vboxChooser = {
 
         var tbl;
         var flag = 1;
-        //var owner = '1',login_user = '1';
+
         if(!(vmn.id == 'host'))
         {
             var current_user = vboxAjaxRequestSyn('getCurrentUser');
             var owner = vboxAjaxRequestSyn('machineEnumerateExtraData',{'vm':vmn.id});
-            if(current_user != owner)
+            if(current_user != owner && current_user != 'admin')
                 flag = 0;
         }
 

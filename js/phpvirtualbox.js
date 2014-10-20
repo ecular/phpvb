@@ -1644,17 +1644,17 @@ var vboxVMActions = {
 		label:trans('Refresh','UIVMLogViewer'),
 		icon:'refresh',
 		icon_disabled:'refresh_disabled',
-		click:function(){
-			
-			var vmid = vboxChooser.getSingleSelectedId();
-			
-			var l = new vboxLoader();
-			l.showLoading();
-			$.when(vboxVMDataMediator.refreshVMData(vmid)).done(function(){
-				l.removeLoading();
-			});
-			
-    	},
+	//	click:function(){
+	//		
+	//		var vmid = vboxChooser.getSingleSelectedId();
+	//		
+	//		var l = new vboxLoader();
+	//		l.showLoading();
+	//		$.when(vboxVMDataMediator.refreshVMData(vmid)).done(function(){
+	//			l.removeLoading();
+	//		});
+	//		
+    //	},
     	enabled: function () {return(vboxChooser.selectedVMs.length ==1);}
     },
     

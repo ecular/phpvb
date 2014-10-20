@@ -38,7 +38,7 @@ vboxChooser.setContextMenu('group', [
     $.extend({},vboxVMActions['reset'],{'name':'reset'}),
 	$.extend({},vboxVMActions['stop'],{'name':'stop','children':sChildren}),
 	$.extend({},vboxVMActions['discard'],{'name':'discard','separator' : true}),
-	$.extend({},vboxVMActions['refresh'],{'name':'refresh'}),
+	//$.extend({},vboxVMActions['refresh'],{'name':'refresh'}),
 	$.extend({}, vboxVMGroupActions['sort'], {name:'sort',separator:true}),
 ]);
 
@@ -58,7 +58,7 @@ vboxChooser.setContextMenu('vm',[
    	$.extend({},vboxVMActions['stop'],{'name':'stop','children':sChildren}),
    	$.extend({},vboxVMActions['discard'],{'name':'discard','separator' : true}),
    	$.extend({},vboxVMActions['logs'],{'name':'logs'}),
-   	$.extend({},vboxVMActions['refresh'],{'name':'refresh'})
+   	//$.extend({},vboxVMActions['refresh'],{'name':'refresh'})
 ]);
 
 // Don't need thse anymore
