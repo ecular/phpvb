@@ -3813,15 +3813,22 @@ class vboxconnector {
 
 
 			try {
-				
-				if($this->settings->phpVboxGroups) {
-					$groups = explode(',',$machine->getExtraData(vboxconnector::phpVboxGroupKey));
-					if(!is_array($groups) || (count($groups) == 1 && !$groups[0])) $groups = array("/");
-				} else {
-					$groups = $machine->groups;
-				}
-				
-				usort($groups, 'strnatcasecmp');
+
+                if($this->settings->phpVboxGroups) 
+                {
+                    ;
+                    $groups = explode(',',$machine->getExtraData(vboxconnector::phpVboxGroupKey));
+
+                    if(!is_array($groups) || (count($groups) == 1 && !$groups[0])) 
+                        $groups = array("/");
+                } 
+                else 
+                {
+                    $groups = $machine->groups;
+                    ;
+                }
+
+                usort($groups, 'strnatcasecmp');
 				
 				$vmlist[] = array(
 					'name' => @$this->settings->enforceVMOwnership ? preg_replace('/^' . preg_quote($_SESSION['user']) . '_/', '', $machine->name) : $machine->name,
@@ -4103,7 +4110,7 @@ class vboxconnector {
 	 */
 	private function _machineGetSharedFolders(&$m) {
 
-        //$m->setExtraData('xujian','xujian');
+        //$m->setExtraData('bupt','xujian');
 		$sfs = &$m->sharedFolders;
 		$return = array();
 		foreach($sfs as $sf) { /* @var $sf ISharedFolder */
@@ -5393,25 +5400,27 @@ class vboxconnector {
 		
 		$response = array();
 		
-		$keys = $this->vbox->getExtraDataKeys();
-		
-		$groupKey = ($this->settings->phpVboxGroups ? vboxconnector::phpVboxGroupKey : 'GUI/GroupDefinitions');
-		foreach($keys as $grouppath) {
-			
-			if(strpos($grouppath,$groupKey) !== 0) continue;
-			
-			$subgroups = array();
-			$machines = array();
-			
-			$response[] = array(
-				'name' => substr($grouppath,strrpos($grouppath,'/')+1),
-				'path' => substr($grouppath,strlen($groupKey)),
-				'order' => $this->vbox->getExtraData($grouppath)
-			);
-		}
+     //   if ( isset($_SESSION['user']) &&  $_SESSION['user'] == 'admin')
+        {
+            $keys = $this->vbox->getExtraDataKeys();
 
+            $groupKey = ($this->settings->phpVboxGroups ? vboxconnector::phpVboxGroupKey : 'GUI/GroupDefinitions');
+
+                foreach($keys as $grouppath) {
+                    
+                        if(strpos($grouppath,$groupKey) !== 0) continue;
+
+                    $subgroups = array();
+                    $machines = array();
+
+                    $response[] = array(
+                        'name' => substr($grouppath,strrpos($grouppath,'/')+1),
+                        'path' => substr($grouppath,strlen($groupKey)),
+                        'order' => $this->vbox->getExtraData($grouppath)
+                    );
+                }
+        }
 		return $response;
-		
 	}
 	
 	/**
