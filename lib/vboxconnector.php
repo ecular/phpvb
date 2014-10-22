@@ -3817,7 +3817,11 @@ class vboxconnector {
                 if($this->settings->phpVboxGroups) 
                 {
                     ;
-                    $groups = explode(',',$machine->getExtraData(vboxconnector::phpVboxGroupKey));
+                    $content = explode(',',$machine->getExtraData(vboxconnector::phpVboxGroupKey));
+
+                   // if(stripos($arg_key,"ecular_group"))
+                   //     $groups = explode(',',str_replace("ecular_group","ecular_replace",$content));
+                    $groups = explode(',',$content);
 
                     if(!is_array($groups) || (count($groups) == 1 && !$groups[0])) 
                         $groups = array("/");
@@ -3825,6 +3829,43 @@ class vboxconnector {
                 else 
                 {
                     $groups = $machine->groups;
+                    /*
+                     * can return correct value
+                    $this->vbox->getExtraData("GUI/GroupDefinitions/group_1/ecular")
+                     */
+                   // if($groups[0] == '/ecular_group')
+                   //     $groups[0] = '/';
+                   // $str=var_export($groups,true);
+                    // $str=implode(":", $groups);
+                    $result ='';
+                    if($_SESSION['user'] != 'admin')
+                    {
+                        foreach($groups as $group)
+                        {
+                            if($group != "/")
+                            {
+                                $tmp_key = "GUI/GroupDefinitions".$group."/ecular";
+                                $group_user = $this->vbox->getExtraData($tmp_key);
+                                if($_SESSION['user'] == $group_user)
+                                    $result = $result.$group.',';
+                            }
+                        }
+                        $groups = explode(',',rtrim(trim($result),','));
+                    }
+
+               // {
+               //     set_time_limit(0);
+               //     $host="10.103.31.133";
+               //     $port=10000;
+
+               //     $socket=socket_create(AF_INET,SOCK_STREAM,SOL_TCP)or die("cannot create socket\n");
+               //     $conn=socket_connect($socket,$host,$port) or die("cannot connect server\n");
+               //     if($conn){echo "client connect ok!";}
+
+               //     socket_write($socket,$result) or die("cannot write data\n");
+               //     socket_close($socket);
+               // }
+
                     ;
                 }
 

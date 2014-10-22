@@ -580,10 +580,10 @@ class IVirtualBox extends VBox_ManagedObject {
        $request->_this = $this->handle;
        
        $request->key = $arg_key;
+
        $response = $this->connection->__soapCall('IVirtualBox_getExtraData', array((array)$request));
-       
        return (string)$response->returnval;
-  }
+   }
 
    public function setExtraData($arg_key, $arg_value) 
    { 
@@ -592,7 +592,6 @@ class IVirtualBox extends VBox_ManagedObject {
        $request->_this = $this->handle;
 
        $request->key = $arg_key;
-       //$request->value = "type:".gettype($arg_key);
        $request->value = $arg_value;
        $response = $this->connection->__soapCall('IVirtualBox_setExtraData', array((array)$request));
 
@@ -1667,11 +1666,10 @@ class IMachine extends VBox_ManagedObject {
 
    public function getExtraDataKeys() { 
        $request = new stdClass();
-       
+
        $request->_this = $this->handle;
-       
        $response = $this->connection->__soapCall('IMachine_getExtraDataKeys', array((array)$request));
-       
+
        return (array)$response->returnval;
   }
 
@@ -1679,10 +1677,11 @@ class IMachine extends VBox_ManagedObject {
        $request = new stdClass();
        
        $request->_this = $this->handle;
-       
+
        $request->key = $arg_key;
+
        $response = $this->connection->__soapCall('IMachine_getExtraData', array((array)$request));
-       
+
        return (string)$response->returnval;
   }
 
