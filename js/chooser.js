@@ -1943,7 +1943,16 @@ var vboxChooser = {
 	 	var gname = gpath.substring(gpath.lastIndexOf('/')+1);
 	 	var collapsed = vboxChooser._isGroupCollapsed(gpath);
 	 	
-		var gHTML = $('<div />').append(
+        var gHTML = $('<div />');
+        if(gname != '')
+        {
+            //alert(gname);
+            var verify_result = vboxAjaxRequestSyn('verifyGroupOnwer',{'gname':gname});
+            if(verify_result == "0")
+                gHTML = gHTML.css({'display':'none'});
+        }
+
+        gHTML.append(
 				$('<div />').addClass('vboxChooserGroupIdentifier').css({'display':'none'}).attr({'title':gname})
 			).append(
 			$('<div />').addClass('vboxChooserGroupHeader vboxHover').css({'display':(first ? 'none' : '')})

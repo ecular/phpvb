@@ -596,25 +596,28 @@ class IVirtualBox extends VBox_ManagedObject {
        $response = $this->connection->__soapCall('IVirtualBox_setExtraData', array((array)$request));
 
        /*add correct.but can not del */
-       if(stripos($arg_key,"GroupDefinitions") && strlen($arg_key) > 21 /*&& !stripos($arg_key,"ecular")*/)
-       {
-           $request_ecular = new stdClass();
-           $request_ecular->_this = $this->handle;
-           $request_ecular->value = $_SESSION['user'];
+     //  if(stripos($arg_key,"GroupDefinitions") && strlen($arg_key) > 21 /*&& !stripos($arg_key,"ecular")*/)
+     //  {
+     //      $request_ecular = new stdClass();
+     //      $request_ecular->_this = $this->handle;
+     //      $request_ecular->value = $_SESSION['user'];
 
-           //if($arg_value == '' && stripos($arg_key,"ecular"))
-             //  $request_ecular->value = '';
+     //      if($arg_value == '')
+     //          $request_ecular->value = '';
 
-           //else
-           //  $request_ecular->value = '';
+     //      // if($arg_value == '' && stripos($arg_key,"ecular"))
+     //      //     $request_ecular->value = '';
 
-           if(!stripos($arg_key,"ecular"))
-               $request_ecular->key = $arg_key."/ecular";
-           else
-               $request_ecular->key = $arg_key;
+     //      //else
+     //      //  $request_ecular->value = '';
 
-           $this->connection->__soapCall('IVirtualBox_setExtraData', array((array)$request_ecular));
-       }
+     //      if(!stripos($arg_key,"ecular"))
+     //          $request_ecular->key = $arg_key."/ecular";
+     //      else
+     //          $request_ecular->key = $arg_key;
+
+     //      $this->connection->__soapCall('IVirtualBox_setExtraData', array((array)$request_ecular));
+     //  }
 
        return ;
    }
@@ -1692,19 +1695,6 @@ class IMachine extends VBox_ManagedObject {
 
        $request->key = $arg_key;
        $request->value = $arg_value;
-
-    //   if(strpos($arg_key,"GroupDefinitions") && strlen($arg_key) > 21)
-    //   {
-    //       $request_ecular = new stdClass();
-    //       $request_ecular->_this = $this->handle;
-    //       $request_ecular->key = "GUI/GroupDefinitions/group_1/ecular";
-    //       if($arg_value != "")
-    //           $request_ecular->value = $_SESSION['user'];
-    //       else
-    //           $request_ecular->value = $arg_value;
-
-    //       $response = $this->connection->__soapCall('IVirtualBox_setExtraData', array((array)$request_ecular));
-    //   }
 
        $response = $this->connection->__soapCall('IMachine_setExtraData', array((array)$request));
 

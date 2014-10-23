@@ -972,6 +972,24 @@ class vboxconnector {
 	}
 	
 	/**
+     *verify group onwer 
+     */
+     public function remote_verifyGroupOnwer($args) {
+		// Connect to vboxwebsrv
+		$this->connect();
+
+         if (isset($_SESSION['user']))
+         {
+             $owner = $this->vbox->getExtraData("GUI/GroupDefinitions/".$args['gname']."/ecular");
+             if($_SESSION['user'] == $owner)
+                 return '1';
+             else 
+                 return '0';
+         }
+        return '0';
+     }
+
+	/**
      * get current Login user
      */
      public function remote_getCurrentUser() {
@@ -981,6 +999,7 @@ class vboxconnector {
          }
         return NULL;
      }
+
 	/**
 	 * Enumerate extra data of a vm
 	 *
@@ -3819,8 +3838,6 @@ class vboxconnector {
                     ;
                     $content = explode(',',$machine->getExtraData(vboxconnector::phpVboxGroupKey));
 
-                   // if(stripos($arg_key,"ecular_group"))
-                   //     $groups = explode(',',str_replace("ecular_group","ecular_replace",$content));
                     $groups = explode(',',$content);
 
                     if(!is_array($groups) || (count($groups) == 1 && !$groups[0])) 
@@ -3837,21 +3854,27 @@ class vboxconnector {
                    //     $groups[0] = '/';
                    // $str=var_export($groups,true);
                     // $str=implode(":", $groups);
-                    $result ='';
-                    if($_SESSION['user'] != 'admin')
-                    {
-                        foreach($groups as $group)
-                        {
-                            if($group != "/")
-                            {
-                                $tmp_key = "GUI/GroupDefinitions".$group."/ecular";
-                                $group_user = $this->vbox->getExtraData($tmp_key);
-                                if($_SESSION['user'] == $group_user)
-                                    $result = $result.$group.',';
-                            }
-                        }
-                        $groups = explode(',',rtrim(trim($result),','));
-                    }
+                    //
+
+
+                   // $result ='';
+                   // if($_SESSION['user'] != 'admin')
+                   // {
+                   //     foreach($groups as $group)
+                   //     {
+                   //         if($group != "/")
+                   //         {
+                   //             $tmp_key = "GUI/GroupDefinitions".$group."/ecular";
+                   //             $group_user = $this->vbox->getExtraData($tmp_key);
+                   //             if($_SESSION['user'] == $group_user)
+                   //                 $result = $result.$group.',';
+                   //         }
+                   //     }
+                   //     $groups = explode(',',rtrim(trim($result),','));
+                   // }
+
+
+
 
                // {
                //     set_time_limit(0);
