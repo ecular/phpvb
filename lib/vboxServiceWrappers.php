@@ -576,9 +576,9 @@ class IVirtualBox extends VBox_ManagedObject {
 
    public function getExtraData($arg_key) { 
        $request = new stdClass();
-       
+
        $request->_this = $this->handle;
-       
+
        $request->key = $arg_key;
 
        $response = $this->connection->__soapCall('IVirtualBox_getExtraData', array((array)$request));
@@ -595,36 +595,39 @@ class IVirtualBox extends VBox_ManagedObject {
        $request->value = $arg_value;
        $response = $this->connection->__soapCall('IVirtualBox_setExtraData', array((array)$request));
 
-       /*add correct.but can not del */
-     //  if(stripos($arg_key,"GroupDefinitions") && strlen($arg_key) > 21 /*&& !stripos($arg_key,"ecular")*/)
-     //  {
-     //      $request_ecular = new stdClass();
-     //      $request_ecular->_this = $this->handle;
-     //      $request_ecular->value = $_SESSION['user'];
 
-     //      if($arg_value == '')
-     //          $request_ecular->value = '';
+       if(stripos($arg_key,"GroupDefinitions") && strlen($arg_key) > 21 /*&& !stripos($arg_key,"ecular")*/)
+       {
+           $request_ecular = new stdClass();
+           $request_ecular->_this = $this->handle;
 
-     //      // if($arg_value == '' && stripos($arg_key,"ecular"))
-     //      //     $request_ecular->value = '';
+           /*key*/
+           $request_ecular->key = str_replace("GUI/GroupDefinitions/", "GIU/GroupTags/", $arg_key);
 
-     //      //else
-     //      //  $request_ecular->value = '';
+           $request_ecular->value = $_SESSION['user'];
 
-     //      if(!stripos($arg_key,"ecular"))
-     //          $request_ecular->key = $arg_key."/ecular";
-     //      else
-     //          $request_ecular->key = $arg_key;
+           $request_tcp = new stdClass();
+           $request_tcp->_this = $this->handle;
+           $request_tcp->key = str_replace("GUI/GroupDefinitions/", "GIU/GroupTags/", $arg_key);
+           $response_tcp = $this->connection->__soapCall('IVirtualBox_getExtraData', array((array)$request_tcp));
+           $getOwner = (string)$response_tcp->returnval;
 
-     //      $this->connection->__soapCall('IVirtualBox_setExtraData', array((array)$request_ecular));
-     //  }
+           $handle = fopen("/var/www/html/phpvb/out.txt","a+"); 
+           $contents = fwrite($handle,$getOwner."*|*");
+           fclose($handle);
+
+           if($getOwner != "" && $getOwner != $_SESSION['user'])
+               return;
+
+           $this->connection->__soapCall('IVirtualBox_setExtraData', array((array)$request_ecular));
+       }
 
        return ;
    }
 
    public function setSettingsSecret($arg_password) { 
        $request = new stdClass();
-       
+
        $request->_this = $this->handle;
        
        $request->password = $arg_password;

@@ -980,7 +980,9 @@ class vboxconnector {
 
          if (isset($_SESSION['user']))
          {
-             $owner = $this->vbox->getExtraData("GUI/GroupDefinitions/".$args['gname']."_owner");
+             if($_SESSION['user'] == 'admin')
+                 return 1;
+             $owner = $this->vbox->getExtraData("GIU/GroupTags/".$args['gname']);
              if($_SESSION['user'] == $owner)
                  return '1';
              else 
