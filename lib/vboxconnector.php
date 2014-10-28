@@ -983,7 +983,7 @@ class vboxconnector {
              if($_SESSION['user'] == 'admin')
                  return 1;
              $owner = $this->vbox->getExtraData("GIU/GroupTags/".$args['gname']);
-             if($_SESSION['user'] == $owner)
+             if($_SESSION['user'] == $owner || $owner == "")
                  return '1';
              else 
                  return '0';
@@ -3818,12 +3818,13 @@ class vboxconnector {
 		$vmlist = array();
 		
 		// Look for a request for a single vm
-		if($args['vm']) {
-			
-		
-		// Full list
-		} else {
-			//Get a list of registered machines
+        if($args['vm']) {
+
+            $machines = array($this->vbox->findMachine($args['vm']));	
+
+            // Full list
+        } else {
+            //Get a list of registered machines
 			$machines = $this->vbox->machines;
 			
 		}

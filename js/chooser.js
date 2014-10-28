@@ -571,7 +571,7 @@ var vboxChooser = {
         {
             var current_user = vboxAjaxRequestSyn('getCurrentUser');
             var owner = vboxAjaxRequestSyn('machineEnumerateExtraData',{'vm':vmn.id});
-            if(current_user != owner && current_user != 'admin')
+            if((current_user != owner && current_user != 'admin'))
                 flag = 0;
         }
 

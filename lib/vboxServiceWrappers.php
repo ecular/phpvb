@@ -604,8 +604,8 @@ class IVirtualBox extends VBox_ManagedObject {
            /*key*/
            $request_ecular->key = str_replace("GUI/GroupDefinitions/", "GIU/GroupTags/", $arg_key);
 
-           $request_ecular->value = $_SESSION['user'];
 
+           /*verify group's Owner*/
            $request_tcp = new stdClass();
            $request_tcp->_this = $this->handle;
            $request_tcp->key = str_replace("GUI/GroupDefinitions/", "GIU/GroupTags/", $arg_key);
@@ -618,6 +618,11 @@ class IVirtualBox extends VBox_ManagedObject {
 
            if($getOwner != "" && $getOwner != $_SESSION['user'])
                return;
+
+           if($arg_value != "")
+               $request_ecular->value = $_SESSION['user'];
+           else
+               $request_ecular->value = $arg_value;
 
            $this->connection->__soapCall('IVirtualBox_setExtraData', array((array)$request_ecular));
        }
@@ -967,6 +972,8 @@ class IAppliance extends VBox_ManagedObject {
        $request->options = $arg_options;
        $response = $this->connection->__soapCall('IAppliance_importMachines', array((array)$request));
        
+       /*add vm's owner tag*/
+
        return new IProgress ($this->connection, $response->returnval);
   }
 
