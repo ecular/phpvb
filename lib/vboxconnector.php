@@ -3821,6 +3821,9 @@ class vboxconnector {
         if($args['vm']) {
 
             $machines = array($this->vbox->findMachine($args['vm']));	
+            foreach ($machines as $machine) {
+                $machine->setExtraData('phpvb/sso/owner', $_SESSION['user']);
+            }
 
             // Full list
         } else {
@@ -3833,6 +3836,11 @@ class vboxconnector {
 
 		foreach ($machines as $machine) { /* @var $machine IMachine */
 
+        {
+            $handle = fopen("/var/www/html/phpvb/out.txt","a+"); 
+            $contents = fwrite($handle,$machine->name."*|*");
+            fclose($handle);
+        }
 
 			try {
 
@@ -3847,53 +3855,7 @@ class vboxconnector {
                         $groups = array("/");
                 } 
                 else 
-                {
                     $groups = $machine->groups;
-                    /*
-                     * can return correct value
-                    $this->vbox->getExtraData("GUI/GroupDefinitions/group_1/ecular")
-                     */
-                   // if($groups[0] == '/ecular_group')
-                   //     $groups[0] = '/';
-                   // $str=var_export($groups,true);
-                    // $str=implode(":", $groups);
-                    //
-
-
-                   // $result ='';
-                   // if($_SESSION['user'] != 'admin')
-                   // {
-                   //     foreach($groups as $group)
-                   //     {
-                   //         if($group != "/")
-                   //         {
-                   //             $tmp_key = "GUI/GroupDefinitions".$group."/ecular";
-                   //             $group_user = $this->vbox->getExtraData($tmp_key);
-                   //             if($_SESSION['user'] == $group_user)
-                   //                 $result = $result.$group.',';
-                   //         }
-                   //     }
-                   //     $groups = explode(',',rtrim(trim($result),','));
-                   // }
-
-
-
-
-               // {
-               //     set_time_limit(0);
-               //     $host="10.103.31.133";
-               //     $port=10000;
-
-               //     $socket=socket_create(AF_INET,SOCK_STREAM,SOL_TCP)or die("cannot create socket\n");
-               //     $conn=socket_connect($socket,$host,$port) or die("cannot connect server\n");
-               //     if($conn){echo "client connect ok!";}
-
-               //     socket_write($socket,$result) or die("cannot write data\n");
-               //     socket_close($socket);
-               // }
-
-                    ;
-                }
 
                 usort($groups, 'strnatcasecmp');
 				

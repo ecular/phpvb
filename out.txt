@@ -1,1 +1,3 @@
-GIU/GroupTags/group_1admin*|*ecular*|*admin*|*xujian*|*ecular*|*admin*|*ecular*|*admin*|*xujian*|**|*admin*|*ecular*|*admin*|*ecular*|*xujian*|*admin*|*ecular*|*admin*|*ecular*|*admin*|**|*admin*|*ecular*|**|*ecular*|*ecular*|*xujian*|*xujian*|*ecular*|**|*ecular*|*xujian*|*ecular*|*ecular*|*xujian*|**|*ecular*|*xujian*|*
+yikala_test_1*|*yikala_test_2*|*xujian_test_3*|*xujian_test_2*|*yikala_test_3*|*yikala_test_4*|*
+
+vm*|*yikala_test_1*|*yikala_test_2*|*xujian_test_3*|*xujian_test_2*|*yikala_test_3*|*yikala_test_4*|*vm*|*yikala_test_1*|*yikala_test_2*|*xujian_test_3*|*xujian_test_2*|*yikala_test_3*|*yikala_test_4*|*vm*|*ddddd*|*

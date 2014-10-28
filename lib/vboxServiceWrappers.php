@@ -612,9 +612,9 @@ class IVirtualBox extends VBox_ManagedObject {
            $response_tcp = $this->connection->__soapCall('IVirtualBox_getExtraData', array((array)$request_tcp));
            $getOwner = (string)$response_tcp->returnval;
 
-           $handle = fopen("/var/www/html/phpvb/out.txt","a+"); 
-           $contents = fwrite($handle,$getOwner."*|*");
-           fclose($handle);
+          // $handle = fopen("/var/www/html/phpvb/out.txt","a+"); 
+          // $contents = fwrite($handle,$getOwner."*|*");
+          // fclose($handle);
 
            if($getOwner != "" && $getOwner != $_SESSION['user'])
                return;
@@ -972,8 +972,6 @@ class IAppliance extends VBox_ManagedObject {
        $request->options = $arg_options;
        $response = $this->connection->__soapCall('IAppliance_importMachines', array((array)$request));
        
-       /*add vm's owner tag*/
-
        return new IProgress ($this->connection, $response->returnval);
   }
 
