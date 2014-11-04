@@ -18,40 +18,72 @@
 // Top menu
 var vboxTopMenuBar = new vboxMenuBar('vboxTop');
 
-var menu = {
-	'name':'vboxTopFile',
-	'label':trans('File','UIActionPool'),
-	'menu':[
-        {
-			'name':'fileVMM',
-			'label':trans('Virtual Media Manager...','UIActionPool'),
-			'icon':'diskimage',
-			'click':function(){vboxVMMDialog();}
+var menu;
+
+if($('#vboxPane').data('vboxSession').user == "admin") 
+menu = {
+    'name':'vboxTopFile',
+    'label':trans('File','UIActionPool'),
+    'menu':[
+    {
+        'name':'fileVMM',
+        'label':trans('Virtual Media Manager...','UIActionPool'),
+        'icon':'diskimage',
+        'click':function(){vboxVMMDialog();}
+    },
+    {
+        'name':'fileImport',
+        'label':trans('Import Appliance...','UIActionPool'),
+        'icon':'import',
+        'click':function(){
+
+            new vboxWizardImportApplianceDialog().run();
         },
-        {
-			'name':'fileImport',
-			'label':trans('Import Appliance...','UIActionPool'),
-			'icon':'import',
-			'click':function(){
-				
-				new vboxWizardImportApplianceDialog().run();
-			},
-			'separator': true
+        'separator': true
+    },
+    {
+        'name':'fileExport',
+        'label':trans('Export Appliance...','UIActionPool'),
+        'icon':'export',
+        'click':function(){new vboxWizardExportApplianceDialog().run();}
+    },
+    {
+        'name':'filePrefs',
+        'label':trans('Preferences...','UIActionPool'),
+        'icon':'global_settings',
+        'click':function(){vboxGlobalPrefsDialog();},
+        'separator':true
+    }
+    ]
+};
+else
+menu = {
+    'name':'vboxTopFile',
+    'label':trans('File','UIActionPool'),
+    'menu':[
+    {
+        'name':'fileVMM',
+        'label':trans('Virtual Media Manager...','UIActionPool'),
+        'icon':'diskimage',
+        'click':function(){vboxVMMDialog();}
+    },
+    {
+        'name':'fileImport',
+        'label':trans('Import Appliance...','UIActionPool'),
+        'icon':'import',
+        'click':function(){
+
+            new vboxWizardImportApplianceDialog().run();
         },
-        {
-			'name':'fileExport',
-			'label':trans('Export Appliance...','UIActionPool'),
-			'icon':'export',
-			'click':function(){new vboxWizardExportApplianceDialog().run();}
-        },
-        {
-			'name':'filePrefs',
-			'label':trans('Preferences...','UIActionPool'),
-			'icon':'global_settings',
-			'click':function(){vboxGlobalPrefsDialog();},
-			'separator':true
-        }
-	]
+        'separator': true
+    },
+    {
+        'name':'fileExport',
+        'label':trans('Export Appliance...','UIActionPool'),
+        'icon':'export',
+        'click':function(){new vboxWizardExportApplianceDialog().run();}
+    },
+    ]
 };
 
 if($('#vboxPane').data('vboxSession').user) {
